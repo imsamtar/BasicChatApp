@@ -2,59 +2,11 @@
 	export let segment;
 </script>
 
-<style>
-	nav {
-		border-bottom: 1px solid rgba(255,62,0,0.1);
-		font-weight: 300;
-		padding: 0 1em;
-	}
-
-	ul {
-		margin: 0;
-		padding: 0;
-	}
-
-	/* clearfix */
-	ul::after {
-		content: '';
-		display: block;
-		clear: both;
-	}
-
-	li {
-		display: block;
-		float: left;
-	}
-
-	.selected {
-		position: relative;
-		display: inline-block;
-	}
-
-	.selected::after {
-		position: absolute;
-		content: '';
-		width: calc(100% - 1em);
-		height: 2px;
-		background-color: rgb(255,62,0);
-		display: block;
-		bottom: -1px;
-	}
-
-	a {
-		text-decoration: none;
-		padding: 1em 0.5em;
-		display: block;
-	}
-</style>
-
-<nav>
-	<ul>
-		<li><a class:selected='{segment === undefined}' href='.'>home</a></li>
-		<li><a class:selected='{segment === "about"}' href='about'>about</a></li>
-
-		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
-		     the blog data when we hover over the link or tap it on a touchscreen -->
-		<li><a rel=prefetch class:selected='{segment === "blog"}' href='blog'>blog</a></li>
+<nav class="navbar is-primary">
+	<ul class="navbar-menu navbar-end">
+		<li class="navbar-item"><a class="button is-primary" class:has-text-primary='{segment === "login" || segment === "logout"}' href='.'>Signup</a></li>
+		<li class="navbar-item"><a class="button is-primary" class:is-hidden='{segment === "login" || segment === "logout"}' href='login'>Login</a></li>
+		<li class="navbar-item"><a class="button is-primary" class:is-hidden='{segment !== "login"}' href='logout'>Logout</a></li>
+		<li class="navbar-item"><a class="button is-primary" target="_blank" href='//github.com/imsamtar/BasicChatApp'><i class="fab fa-github"></i></a></li>
 	</ul>
 </nav>
