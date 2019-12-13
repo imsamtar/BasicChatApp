@@ -18,6 +18,10 @@
 		<span class="icon is-right is-small"><i class="fas fa-check"></i></span>
 	</div>
 
-	<input type="submit" style="margin-top:10px;" class="button is-primary is-fullwidth" value="Login">
+	<input type="submit" style="margin:10px 0 10px 0;" class="button is-primary is-fullwidth is-outlined" value="Login">
+	<a href="/forget" type="submit" style="margin-top:10px;" class="has-text-danger">Lost your password?</a><br/>
+	<a href="/signup" type="submit" style="margin-top:10px;" class="has-text-link">Don't have an account?</a>
+	
+	
 
 </form>
