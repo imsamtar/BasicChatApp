@@ -2,9 +2,8 @@ import express from 'express';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
 import mongoose from 'mongoose';
-import {mongoLink} from '../.env/index';
 
-mongoose.connect(mongoLink, {
+mongoose.connect(process.env.dblink, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true,
