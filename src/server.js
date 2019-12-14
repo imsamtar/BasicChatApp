@@ -1,17 +1,23 @@
-import sirv from 'sirv';
-import polka from 'polka';
+import express from 'express';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
+import mongoose from 'mongoose';
+import {mongoLink} from '../.env/index';
+
+mongoose.connect(mongoLink, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, (err) => console.log(err?err:'Connected to database'));
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
-polka() // You can also use Express
-	.use(
-		compression({ threshold: 0 }),
-		sirv('static', { dev }),
-		sapper.middleware()
-	)
-	.listen(PORT, err => {
-		if (err) console.log('error', err);
-	});
+const app = new express();
+
+app.use(
+	express.json({ extended: true }),
+	compression({ threshold: 0 }),
+	express.static('static', { dev }),
+	sapper.middleware()
+);
+
+app.listen(PORT, err => {
+	if (err) console.log('error', err);
+});
