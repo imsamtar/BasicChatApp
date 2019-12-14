@@ -4,7 +4,12 @@ import * as sapper from '@sapper/server';
 import mongoose from 'mongoose';
 import {mongoLink} from '../.env/index';
 
-mongoose.connect(mongoLink, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, (err) => console.log(err?err:'Connected to database'));
+mongoose.connect(mongoLink, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+	useCreateIndex: true,
+	useFindAndModify: false
+}, (err) => console.log(err?err:'Connected to database'));
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
