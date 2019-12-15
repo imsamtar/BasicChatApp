@@ -14,6 +14,7 @@ export async function getUser(id){
     }
 }
 export async function postUser(user){
+    console.log(user);
     try {
         user.hash = await bcrypt.hashSync(user.hash, 10);
         user = await new User(user);
@@ -29,6 +30,14 @@ export async function putUser(user){
 export async function patchUser(id, user){
     await User.findByIdAndUpdate(id, user)
     return removeHash(await User.findById(id));
+}
+
+export async function authUser(user){
+    let response;
+    await User.findOne({username: user.username}, (err, res) => {
+        response = (!err && res && bcrypt.compareSync(user.hash, res.hash))?removeHash(res):{"errmsg": "not authorized"};
+    });
+    return response;
 }
 
 function removeHash(user){
