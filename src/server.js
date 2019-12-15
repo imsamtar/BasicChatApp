@@ -9,7 +9,7 @@ dotenv.config();
 const { PORT, NODE_ENV, dblink } = process.env;
 const dev = NODE_ENV === 'development';
 
-mongoose.connect(process.env.dblink, {
+mongoose.connect(dblink, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true,
