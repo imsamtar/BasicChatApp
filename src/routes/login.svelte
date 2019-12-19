@@ -4,7 +4,6 @@ let user = { username: '', hash: ''};
 async function login(e){
 	e.preventDefault();
 	if(validate()){
-		console.log(user);
 		let res = await fetch('/api/users/auth', {
 			method: 'POST',
 			body: JSON.stringify({ user }),
@@ -14,7 +13,7 @@ async function login(e){
 		});
 		res = await res.json();
 		console.log(res);
-		if(res.errmsg!==undefined){
+		if(res.token===undefined){
 			alert('Username or password incorrect');
 		}else{
 			goto('/chats');
