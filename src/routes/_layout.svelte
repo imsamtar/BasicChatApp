@@ -1,7 +1,13 @@
 <script>
+	import {onMount} from 'svelte';
 	import Nav from '../components/Nav.svelte';
+	import {token, LS} from '../store.js';
 
 	export let segment;
+
+	onMount(() => {
+		$token = LS.token;
+	})
 </script>
 
 <style>

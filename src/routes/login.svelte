@@ -1,5 +1,7 @@
 <script>
 import {goto} from '@sapper/app';
+import {token, LS} from '../store.js';
+
 let user = { username: '', hash: ''};
 async function login(e){
 	e.preventDefault();
@@ -12,10 +14,10 @@ async function login(e){
 			}
 		});
 		res = await res.json();
-		console.log(res);
 		if(res.token===undefined){
 			alert('Username or password incorrect');
 		}else{
+			LS.token = $token = res.token;
 			goto('/chats');
 		}
 	}

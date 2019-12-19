@@ -1,9 +1,10 @@
 <script>
     import {goto} from '@sapper/app';
     import {onMount} from 'svelte';
+    import {token, LS} from '../store.js';
     onMount(() => {
-        console.log("Mounted");
-        setTimeout(() => goto('/'), 3000);
+        LS.token = $token = "";
+        setTimeout(() => goto('/'), 1000);
     })
 </script>
 

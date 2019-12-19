@@ -1,5 +1,6 @@
 <script>
 import {goto} from '@sapper/app';
+
 let user = { username: '', email: '', hash: '', profile: { firstName: '', lastName: ''}};
 async function signup(e){
 	e.preventDefault();
