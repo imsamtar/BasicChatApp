@@ -13,6 +13,14 @@ export async function getUser(id){
         return { errmsg: 'Not found'};
     }
 }
+export async function getByUser(user){
+    try {
+        user = await User.findOne(user);
+        return removeHash(user);
+    }catch(err){
+        return { errmsg: 'Not found'};
+    }
+}
 export async function postUser(user){
     console.log(user);
     try {
