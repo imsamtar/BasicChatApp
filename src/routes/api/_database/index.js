@@ -35,7 +35,7 @@ export async function patchUser(id, user){
 export async function authUser(user){
     let response;
     await User.findOne({username: user.username}, (err, res) => {
-        response = (!err && res && bcrypt.compareSync(user.hash, res.hash))?removeHash(res):{"errmsg": "not authorized"};
+        response = (!err && res && bcrypt.compareSync(user.hash, res.hash))?removeHash(res):{failed: true};
     });
     return response;
 }
