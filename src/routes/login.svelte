@@ -34,14 +34,14 @@ function validate(user){
 
 	<label for="username" class="label">Username:</label>
 	<div class="control has-icons-left has-icons-right">
-		<input type="text" class="input is-primary" bind:value={user.username}>
+		<input type="text" class="input is-primary" bind:value={user.username} placeholder="username">
 		<span class="icon is-left is-small"><i class="fas fa-user"></i></span>
 		<span class="icon is-right is-small"><i class="fas fa-check"></i></span>
 	</div>
 
 	<label for="password" class="label">Password:</label>
 	<div class="control has-icons-left has-icons-right">
-		<input type="password" class="input is-primary" bind:value={user.hash}>
+		<input type="password" class="input is-primary" bind:value={user.hash} placeholder="********">
 		<span class="icon is-left is-small"><i class="fas fa-key"></i></span>
 		<span class="icon is-right is-small"><i class="fas fa-check"></i></span>
 	</div>
