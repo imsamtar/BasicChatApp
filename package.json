@@ -1,6 +1,6 @@
 {
-  "name": "appname",
-  "description": "app_description",
+  "name": "basicchatapp",
+  "description": "It is just a simple chat application. Implemented in Sapper/SvelteJS.",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
