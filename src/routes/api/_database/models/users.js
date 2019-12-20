@@ -14,4 +14,10 @@ export let User = mongoose.model('User', new mongoose.Schema({
             year: { type: Number },
         },
     },
+    chats: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Chat'
+        }
+    ]
 }));
