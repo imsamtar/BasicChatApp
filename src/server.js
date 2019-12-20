@@ -4,6 +4,8 @@ import * as sapper from '@sapper/server';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
+import { verify } from './routes/api/users/me/_verify.js';
+
 dotenv.config();
 
 const { PORT, NODE_ENV, dblink } = process.env;
@@ -17,6 +19,8 @@ mongoose.connect(dblink, {
 }, (err) => console.log(err?err:'Connected to database'));
 
 const app = new express();
+
+app.use('/api/users/me/', verify);
 
 app.use(
 	express.json({ extended: true }),

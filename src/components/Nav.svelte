@@ -1,11 +1,18 @@
 <script>
-	import {token} from '../store.js';
+	import {beforeUpdate} from 'svelte';
+	import {LS} from '../store.js';
 	export let segment;
+
+	let token = "";
+	
+	beforeUpdate(() => {
+		token = LS.token;
+	})
 </script>
 
 <nav class="navbar is-primary">
 	<ul class="navbar-menu navbar-end">
-		{#if !$token}
+		{#if !token}
 			<li class="navbar-item">
 				<a class="button is-primary" class:has-text-weight-bold={segment === "signup"} href='.'>Signup</a>
 			</li>

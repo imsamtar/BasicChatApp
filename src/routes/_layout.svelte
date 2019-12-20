@@ -1,13 +1,15 @@
 <script>
 	import {onMount} from 'svelte';
+	import {goto} from '@sapper/app';
 	import Nav from '../components/Nav.svelte';
-	import {token, LS} from '../store.js';
+	import {LS} from '../store.js';
 
 	export let segment;
 
 	onMount(() => {
-		$token = LS.token;
-	})
+		let path = location.pathname.split('/');
+		if(path.length==2 && LS.token) goto('/me');
+	});
 </script>
 
 <style>
