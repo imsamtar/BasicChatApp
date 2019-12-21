@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { User } from '../_database/models/users';
+import { User } from './models/user.js';
 
 
 export async function getUsers(){
