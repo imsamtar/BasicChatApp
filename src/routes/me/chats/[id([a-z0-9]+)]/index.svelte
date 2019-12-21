@@ -37,7 +37,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     margin-bottom: 0;
-    padding: 0 0.5rem 0.5rem 0.5rem;
+    padding: 0.5rem;
 }
 li.notification {
     width: 48%;
@@ -51,7 +51,7 @@ li.right {
 }
 </style>
 
-<ul class="messages list is-primary">
+<ul class="messages list">
     {#each chat.messages || [] as msg}
         <li class="notification" class:right={msg.sender==LS.user._id}><i class="fal fa-user-circle fa-lg"></i>&nbsp;&nbsp;{msg.content}</li>
     {/each}
