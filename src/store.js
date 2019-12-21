@@ -6,6 +6,12 @@ export let LS = {
     },
     get token(){
         return localStorage.getItem("token") || "";
+    },
+    set user(user){
+        localStorage.setItem("user", JSON.stringify(user));
+    },
+    get user(){
+        return JSON.parse(localStorage.getItem("user") || "");
     }
 }
 

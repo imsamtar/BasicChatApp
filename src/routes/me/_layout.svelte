@@ -10,7 +10,7 @@
 			});
             res = await res.json();
 			if(res.authorized){
-                
+                LS.user = res.user;
 			} else {
                 LS.token = "";
                 goto('/login');
