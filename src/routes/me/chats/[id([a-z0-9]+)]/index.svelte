@@ -15,6 +15,7 @@
         refresh = setInterval(async () => {
             chat = (await (await fetch(`/api/users/me/chats/${id}`, { headers: { "authorization": LS.token } })).json());
         }, 10000);
+        window.chat = chat;
     })
     afterUpdate(() => {
         last = document.querySelector('.messages.list>li:last-child');
@@ -27,21 +28,35 @@
 
 <style>
 .messages.list {
-    height: 70vh;
-    overflow: scroll;
+    border: 0;
+    border-color: #00d1b2;
+    border-left: 1px solid #00d1b2;
+    border-right: 1px solid #00d1b2;
+    border-radius: 0;
+    height: calc(100vh - 6.25rem);
+    overflow-y: scroll;
     overflow-x: hidden;
+    margin-bottom: 0;
+    padding: 0 0.5rem 0.5rem 0.5rem;
+}
+li.notification {
+    width: 48%;
+}
+li.right {
+    margin-left: auto;
+    margin-right: 0;
 }
 .flex {
     display: flex;
 }
 </style>
 
-<ul class="messages list">
+<ul class="messages list is-primary">
     {#each chat.messages || [] as msg}
-        <li class="list-item"><i class="fal fa-user-circle fa-lg"></i>&nbsp;&nbsp;{msg.content}</li>
+        <li class="notification" class:right={msg.sender==LS.user._id}><i class="fal fa-user-circle fa-lg"></i>&nbsp;&nbsp;{msg.content}</li>
     {/each}
 </ul>
-<div class="list-item has-text-centered flex">
-    <input type="text" class="input has-outline-0">
-    <button class="button has-text-link"><i class="fas fa-check"></i></button>
+<div class="flex">
+    <input type="text" class="input is-primary" style="border-radius: 0 0 0 0.5rem">
+    <button class="button is-primary" style="border-radius: 0 0 0.5rem 0;"><i class="fas fa-arrow-right"></i></button>
 </div>
