@@ -24,6 +24,10 @@
     onDestroy(() => {
         clearInterval(refresh);
     })
+
+    function sendMsg(e){
+        console.log("send message");
+    }
 </script>
 
 <style>
@@ -56,7 +60,7 @@ li.right {
         <li class="notification" class:right={msg.sender==LS.user._id}><i class="fal fa-user-circle fa-lg"></i>&nbsp;&nbsp;{msg.content}</li>
     {/each}
 </ul>
-<div class="flex">
+<form class="flex" on:submit|preventDefault={sendMsg}>
     <input type="text" class="input is-primary" style="border-radius: 0 0 0 0.5rem">
-    <button class="button is-primary" style="border-radius: 0 0 0.5rem 0;"><i class="fas fa-arrow-right"></i></button>
-</div>
+    <button type="submit" class="button is-primary" style="border-radius: 0 0 0.5rem 0;"><i class="fas fa-arrow-right"></i></button>
+</form>
