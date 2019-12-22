@@ -81,8 +81,8 @@ form > button {
 </style>
 
 <form style="display: flex;" on:submit|preventDefault={createChat} >
-    <input bind:value={name} class="name" placeholder="Name: ">
-    <input bind:value={keyword} class="search-username" placeholder="Search by username">
+    <input bind:value={name} class="name" placeholder="Name of chat">
+    <input bind:value={keyword} class="search-username" placeholder="Filter by username">
     <button type="submit"> <i class="fad fa-forward fa-2x"></i> </button>
 </form>
 <ul class="users">
