@@ -9,22 +9,17 @@
     import {LS} from '../../../../store.js';
 
     export let id;
-    let chat = 0, last, refresh, content = '';
-    onMount(async () => {
-        chat = (await (await fetch(`/api/users/me/chats/${id}`, { headers: { "authorization": LS.token } })).json());
-        refresh = setInterval(async () => {
-            chat = (await (await fetch(`/api/users/me/chats/${id}`, { headers: { "authorization": LS.token } })).json());
-        }, 10000);
-        window.chat = chat;
-    })
-    afterUpdate(() => {
+    let chat = {messages:[]}, last, refresh, content = '';
+    async function fetchMessages(){
+        let temp = (await (await fetch(`/api/users/me/chats/${id}`, { headers: { "authorization": LS.token } })).json());
+        if(temp.messages.length!=chat.messages.length){
+            chat = {...temp};
+        }
+    }
+    function scrollDown(){
         last = document.querySelector('.messages.list>li:last-child');
         last && last.scrollIntoView();
-    })
-    onDestroy(() => {
-        clearInterval(refresh);
-    })
-
+    }
     async function sendMsg(e){
         let msg = await (await fetch(`/api/users/me/chats/${id}`, { method: 'POST', headers: {
                 "authorization": LS.token,
@@ -32,9 +27,17 @@
             },
             body: JSON.stringify({content})
         })).json();
-        chat.messages = [...chat.messages, msg];
+        if(chat) chat.messages = [...chat.messages, msg];
         content = '';
     }
+    onMount(async () => {
+        await fetchMessages();
+        refresh = setInterval(fetchMessages, 5000);
+    });
+    afterUpdate(scrollDown);
+    onDestroy(() => {
+        clearInterval(refresh);
+    });
 </script>
 
 <style>
@@ -48,10 +51,13 @@
     overflow-y: scroll;
     overflow-x: hidden;
     margin-bottom: 0;
-    padding: 0.5rem;
+    padding: 0.5rem 0.1rem;
 }
 li.notification {
     width: 48%;
+    min-width: 280px;
+    padding: 0.3rem 0.5rem;
+    margin: 0.2rem 0;
 }
 li.right {
     margin-left: auto;
@@ -64,7 +70,12 @@ li.right {
 
 <ul class="messages list">
     {#each chat.messages || [] as msg}
-        <li class="notification" class:right={msg.sender==LS.user._id}><i class="fal fa-user-circle fa-lg"></i>&nbsp;&nbsp;{msg.content}</li>
+        <li class="notification" class:right={msg.sender==LS.user.username} class:is-primary={msg.sender==LS.user.username} class:is-link={msg.sender!=LS.user.username}>
+            {#if msg.sender!=LS.user.username}
+                <h3 class:right={msg.sender==LS.user.username}>By: {msg.sender}</h3>
+            {/if}
+            <p>{msg.content}</p>
+        </li>
     {/each}
 </ul>
 <form class="flex" on:submit|preventDefault={sendMsg}>
