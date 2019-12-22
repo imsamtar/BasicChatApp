@@ -26,7 +26,9 @@ export async function post(req, res){
                 if(c._id==req.params.id){
                     Chat.findByIdAndUpdate(c._id, {$push: {messages: newMsg._id}}, async (err, doc) => {
                         let messages = (await Chat.findById(c._id).populate('messages')).messages;
-                        res.json(messages.pop());
+                        let t = messages.pop();
+                        t['_doc'].sender = req.resp.user.username;
+                        res.json(t);
                     });
                 }
                 return c._id==req.params.id;
