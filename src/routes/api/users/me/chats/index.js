@@ -12,6 +12,8 @@ export async function get(req, res){
 
 export async function post(req, res){
     if(typeof(req.body.name)=='string' && typeof(req.body.members)=='object' && req.body.members.length>0){
+        req.body.members = req.body.members.filter(username => username!==req.resp.user.username);
+        req.body.members = req.body.members.filter((username, i) => i==req.body.members.indexOf(username));
         let newChat = await (new Chat({ name: req.body.name, messages: [] })).save();
         await User.findByIdAndUpdate(req.resp.user._id, { $push: { chats: newChat } });
         req.body.members.forEach(async (username) => await User.findOneAndUpdate({username}, { $push: { chats: newChat } }));
