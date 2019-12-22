@@ -5,7 +5,14 @@ import {Message} from '../../../../_database/models/message.js';
 export async function get(req, res){
     let chat = (await User.findById(req.resp.user._id).populate("chats","_id")).chats.find(c => c._id==req.params.id);
     if(chat) {
-        chat = (await Chat.findById(chat._id).populate("messages"));
+        chat = (await Chat.findById(chat._id).populate("messages"))["_doc"];
+        for(let i=0;i<chat.messages.length;i++){
+            chat.messages[i];
+            let doc = await User.findById(chat.messages[i].sender).select("username");
+            chat.messages[i] = {...({...chat.messages[i]}['_doc'])};
+            chat.messages[i]['__v']=undefined;
+            chat.messages[i]['sender']=doc.username;
+        }
         res.json(chat)
     }
     else res.json({ found: false });
