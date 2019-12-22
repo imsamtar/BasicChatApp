@@ -9,7 +9,7 @@
     import {LS} from '../../../../store.js';
 
     export let id;
-    let chat = 0, last, refresh;
+    let chat = 0, last, refresh, content = '';
     onMount(async () => {
         chat = (await (await fetch(`/api/users/me/chats/${id}`, { headers: { "authorization": LS.token } })).json());
         refresh = setInterval(async () => {
@@ -25,8 +25,15 @@
         clearInterval(refresh);
     })
 
-    function sendMsg(e){
-        console.log("send message");
+    async function sendMsg(e){
+        let msg = await (await fetch(`/api/users/me/chats/${id}`, { method: 'POST', headers: {
+                "authorization": LS.token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({content})
+        })).json();
+        chat.messages = [...chat.messages, msg];
+        content = '';
     }
 </script>
 
@@ -61,6 +68,6 @@ li.right {
     {/each}
 </ul>
 <form class="flex" on:submit|preventDefault={sendMsg}>
-    <input type="text" class="input is-primary" style="border-radius: 0 0 0 0.5rem">
+    <input type="text" class="input is-primary" style="border-radius: 0 0 0 0.5rem" bind:value={content}>
     <button type="submit" class="button is-primary" style="border-radius: 0 0 0.5rem 0;"><i class="fas fa-arrow-right"></i></button>
 </form>
