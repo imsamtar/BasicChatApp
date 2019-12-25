@@ -2,6 +2,8 @@ import express from 'express';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
 import mongoose from 'mongoose';
+import socket from 'socket.io';
+import {connected} from './realtime/index';
 import dotenv from 'dotenv';
 
 import { verify } from './routes/api/users/me/_verify.js';
@@ -29,6 +31,10 @@ app.use(
 	sapper.middleware()
 );
 
-app.listen(PORT, err => {
+let server = app.listen(PORT, err => {
 	if (err) console.log('error', err);
 });
+
+export let io = socket(server);
+export let connections = [];
+io.on("connection", connected);

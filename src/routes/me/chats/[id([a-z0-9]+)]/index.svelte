@@ -32,7 +32,22 @@
     }
     onMount(async () => {
         await fetchMessages();
-        refresh = setInterval(fetchMessages, 5000);
+        let socket = io('/');
+        socket.on('connect', () => {
+            socket.on('auth', auth => {
+                console.log(auth);
+            });
+            socket.emit('auth', {token: LS.token, id});
+            socket.on('auth', auth => {
+                if(auth){
+                    socket.on('new msg', async newchat => {
+                        if(newchat){
+                            chat.messages=newchat.messages;
+                        }
+                    })
+                }
+            })
+        })
     });
     afterUpdate(scrollDown);
     onDestroy(() => {
