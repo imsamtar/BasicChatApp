@@ -6,7 +6,11 @@ import {Message} from '../routes/api/_database/models/message';
 let connections = [];
 export function connected(socket){
     connections.push(socket);
-    socket.on("disconnect", s => connections = connections.filter(() => s.id!=socket.id));
+    let listen;
+    socket.on("disconnect", s => {
+        connections = connections.filter(() => s.id!=socket.id);
+        clearInterval(listen);
+    });
     socket.on("auth", async ({token, id}) => {
         try {
             if(token && id && jwt.verify(token, process.env.SECRET)){
@@ -15,7 +19,7 @@ export function connected(socket){
                 if(!!user.chats.find(c => c==id)){
                     socket.emit("auth", true);
                     let last;
-                    let listen = setInterval(() => {
+                    listen = setInterval(() => {
                         Chat.findById(id, { messages: {$slice: -20} }).populate('messages').exec(async (err, res) => {
                             res = res.toObject();
                             res.messages = res.messages.map(m => {
