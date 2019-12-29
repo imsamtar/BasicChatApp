@@ -6,7 +6,6 @@
 	let token = "";
 	
 	beforeUpdate(() => {
-        console.log("Login Nav")
 		token = LS.token;
 	});
     let menuShown = false;

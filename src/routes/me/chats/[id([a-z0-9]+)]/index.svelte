@@ -9,38 +9,35 @@
     import {LS} from '../../../../store.js';
 
     export let id;
-    let chat = {messages:[]}, last, refresh, content = '';
-    async function fetchMessages(socket){
-        console.log(socket);
+    let chat = {messages:[]}, messageList, content = '';
+    async function fetchMessages(newMsg){
         let temp = (await (await fetch(`/api/users/me/chats/${id}`, { headers: { "authorization": LS.token } })).json());
-        if(temp.messages.length!=chat.messages.length){
-            chat = {...temp};
-        }
+        chat = {...temp};
+        if(newMsg) scrollDown();
     }
     function scrollDown(){
-        last = document.querySelector('.messages.list>li:last-child');
-        last && last.scrollIntoView();
+        setTimeout(() => messageList && messageList.scrollBy(0, messageList.scrollHeight+10), 1);
     }
-    async function sendMsg(e){
-        let msg = await (await fetch(`/api/users/me/chats/${id}`, { method: 'POST', headers: {
-                "authorization": LS.token,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({content})
-        })).json();
-        if(chat) chat.messages = [...chat.messages, msg];
+    function sendMsg(e){
+        let msg = content;
+        fetch(`/api/users/me/chats/${id}`, { method: 'POST', headers: {
+            "authorization": LS.token,
+            'Content-Type': 'application/json'
+        },
+            body: JSON.stringify({content: msg})
+        });
+        chat.messages = [...chat.messages, {content, sender: LS.user.username}];
+        scrollDown();
         content = '';
     }
     onMount(async () => {
         await fetchMessages();
+        window.scrool = scrollDown;
+        scrollDown();
         let socket = io('/');
         socket.on('connect', () => {
             socket.on('new msg '+id, fetchMessages);
         });
-    });
-    afterUpdate(scrollDown);
-    onDestroy(() => {
-        clearInterval(refresh);
     });
 </script>
 
@@ -72,7 +69,7 @@ li.right {
 }
 </style>
 
-<ul class="messages list">
+<ul class="messages list" bind:this={messageList}>
     {#each chat.messages || [] as msg}
         <li class="notification" class:right={msg.sender==LS.user.username} class:is-primary={msg.sender==LS.user.username} class:is-link={msg.sender!=LS.user.username}>
             {#if msg.sender!=LS.user.username}

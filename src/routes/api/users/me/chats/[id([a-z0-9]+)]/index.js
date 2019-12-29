@@ -6,7 +6,8 @@ import {io} from '../../../../../../server';
 
 export async function get(req, res){
     try{
-        let chat = (await Chat.aggregate([{$match: {_id: Types.ObjectId(req.params.id) }}, {$unwind: '$messages'}, {$lookup: {from: 'messages', localField: 'messages', foreignField: '_id', as: 'messages'}}, {$unwind: '$messages'}, {$project: {name: 1, 'messages.content': 1, 'messages.sender': 1}}, {$project: {_id: 0}}, {$lookup: {from: 'users', localField: 'messages.sender', foreignField: '_id', as: 'messages.sender'}}, {$project: {'name': 1, 'messages.content': 1, 'messages.sender.username': 1}}, {$unwind: '$messages.sender'}, {$project: {'messages.sender': '$messages.sender.username', 'messages.content': 1, name: 1}}, {$group: {_id: '$name', messages: {$push: '$messages'}}}, {$project: {name: '$_id', _id: 0, messages: 1}}]));
+        let limit = 25;
+        let chat = (await Chat.aggregate([{$match: {_id: Types.ObjectId(req.params.id) }}, {$project: {messages: {$slice: ['$messages', -limit || 10]}}}, {$unwind: '$messages'}, {$lookup: {from: 'messages', localField: 'messages', foreignField: '_id', as: 'messages'}}, {$unwind: '$messages'}, {$project: {name: 1, 'messages.content': 1, 'messages.sender': 1}}, {$project: {_id: 0}}, {$lookup: {from: 'users', localField: 'messages.sender', foreignField: '_id', as: 'messages.sender'}}, {$project: {'name': 1, 'messages.content': 1, 'messages.sender.username': 1}}, {$unwind: '$messages.sender'}, {$project: {'messages.sender': '$messages.sender.username', 'messages.content': 1, name: 1}}, {$group: {_id: '$name', messages: {$push: '$messages'}}}, {$project: {name: '$_id', _id: 0, messages: 1}}]));
         if(chat && chat.length>0) {
             res.json(chat[0])
         }
