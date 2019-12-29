@@ -3,7 +3,7 @@ import compression from 'compression';
 import * as sapper from '@sapper/server';
 import mongoose from 'mongoose';
 import socket from 'socket.io';
-import {connected} from './realtime/index';
+// import {connected} from './realtime/index';
 import dotenv from 'dotenv';
 
 import { verify } from './routes/api/users/me/_verify.js';
@@ -36,5 +36,5 @@ let server = app.listen(PORT, err => {
 });
 
 export let io = socket(server);
-export let connections = [];
-io.on("connection", connected);
+// export let connections = [];
+// io.on("connection", connected);

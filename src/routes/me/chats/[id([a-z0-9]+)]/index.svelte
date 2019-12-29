@@ -10,7 +10,8 @@
 
     export let id;
     let chat = {messages:[]}, last, refresh, content = '';
-    async function fetchMessages(){
+    async function fetchMessages(socket){
+        console.log(socket);
         let temp = (await (await fetch(`/api/users/me/chats/${id}`, { headers: { "authorization": LS.token } })).json());
         if(temp.messages.length!=chat.messages.length){
             chat = {...temp};
@@ -34,20 +35,8 @@
         await fetchMessages();
         let socket = io('/');
         socket.on('connect', () => {
-            socket.on('auth', auth => {
-                console.log(auth);
-            });
-            socket.emit('auth', {token: LS.token, id});
-            socket.on('auth', auth => {
-                if(auth){
-                    socket.on('new msg', async newchat => {
-                        if(newchat){
-                            chat.messages=newchat.messages;
-                        }
-                    })
-                }
-            })
-        })
+            socket.on('new msg '+id, fetchMessages);
+        });
     });
     afterUpdate(scrollDown);
     onDestroy(() => {

@@ -2,6 +2,7 @@ import {User} from '../../../../_database/models/user.js';
 import {Chat} from '../../../../_database/models/chat.js';
 import {Message} from '../../../../_database/models/message.js';
 import {Types} from 'mongoose';
+import {io} from '../../../../../../server';
 
 export async function get(req, res){
     try{
@@ -25,6 +26,7 @@ export async function post(req, res){
                         let messages = (await Chat.findById(c._id).populate('messages')).messages;
                         let t = messages.pop();
                         t['_doc'].sender = req.resp.user.username;
+                        io.emit('new msg '+req.params.id, true);
                         res.json(t);
                     });
                 }
